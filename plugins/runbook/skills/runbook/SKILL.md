@@ -8,7 +8,7 @@ license: MIT
 
 The rule: for ops/infra work, the plan of record is written into an HTML runbook FIRST, the user reviews **the runbook** (not a chat message), and execution starts only on their go-ahead. As steps complete, chips flip so the doc always mirrors reality.
 
-For **any other planned task** (feature, refactor, config change, …): after a plan is approved, ask the user whether to save it as a runbook before executing — if yes, read `<skill-dir>/references/plan-to-runbook.md` for the mapping (also covers pre-deployment code reviews).
+For **any other planned task** (feature, refactor, config change, …): after a plan is approved, ask the user whether to save it as a runbook before executing — if yes, do **not** build the HTML in this session: read `<skill-dir>/references/plan-to-runbook.md` and follow its dispatch recipe to hand the HTML build to a background subagent, then start executing the plan immediately — the approved markdown plan is enough to work from; the runbook catches up in parallel. (The reference also covers pre-deployment code reviews, which stay inline.)
 
 `<skill-dir>` below means this skill's own directory (where this SKILL.md lives — the path is shown when the skill loads). If it isn't evident: `find ~/.claude/plugins ~/.claude/skills -path '*runbook/template.html' -print -quit 2>/dev/null`.
 
