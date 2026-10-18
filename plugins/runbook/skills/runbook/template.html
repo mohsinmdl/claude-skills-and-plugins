@@ -147,6 +147,12 @@
   .rb-btn:hover { background: var(--hover); opacity: 0.95; }
   .rb-btn.active { background: var(--hover); opacity: 1; }
   .rb-btn:focus-visible, .rb-sash:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; opacity: 1; }
+  /* Reload: keeps your place; turns into an "Updated" pill when the file changed (http only) */
+  .rb-reload-label { display: none; }
+  .rb-reload.has-update { width: auto; height: 28px; padding: 0 11px 0 9px; display: flex; gap: 5px; border-radius: 999px; background: var(--accent); color: #fff; opacity: 1; animation: rb-pulse 2s ease-out 3; }
+  .rb-reload.has-update .rb-reload-label { display: inline; font: 600 12px var(--font); }
+  .rb-reload.has-update:hover { background: var(--accent); filter: brightness(1.08); }
+  @keyframes rb-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
   .rb-theme .sun { display: none; }
   :root.dark .rb-theme .sun { display: block; }
   :root.dark .rb-theme .moon { display: none; }
@@ -168,7 +174,10 @@
     body.rb-outline-on .rb-outline, body.rb-outline-on .rb-sash { display: block; }
     body.rb-outline-on .rb-main { margin-right: calc(var(--rb-outline-w) + max(0px, (100vw - var(--rb-outline-w) - 1040px) / 2)); }
   }
-  @media (max-width: 1199px) { .rb-outline-toggle { display: none; } }
+  /* Narrow windows: the outline opens as a drawer over the page instead of docking. */
+  @media (max-width: 1199px) {
+    body.rb-outline-on .rb-outline { display: block; z-index: 29; width: min(var(--rb-outline-w), 85vw); box-shadow: -10px 0 28px rgba(0, 0, 0, 0.18); }
+  }
   @media (max-width: 640px) {
     .rb-main { padding: 20px 16px 56px; }
     h1 { font-size: 1.7em; }
@@ -320,6 +329,7 @@
   };
   var el = function (tag, cls, html) { var n = doc.createElement(tag); if (cls) n.className = cls; if (html) n.innerHTML = html; return n; };
   var ICON = {
+    reload: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8a5 5 0 1 1-1.5-3.55"/><path d="M13 2.5v3h-3"/></svg>',
     outline: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2.5 4h11M5 8h8.5M7.5 12h6"/></svg>',
     moon: '<svg class="moon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z"/></svg>',
     sun: '<svg class="sun" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"/></svg>'
@@ -341,7 +351,9 @@
   outlineBtn.type = 'button'; outlineBtn.title = 'Outline'; outlineBtn.setAttribute('aria-label', 'Toggle outline');
   var themeBtn = el('button', 'rb-btn rb-theme', ICON.moon + ICON.sun);
   themeBtn.type = 'button'; themeBtn.title = 'Toggle light/dark (Ctrl+Shift+L)'; themeBtn.setAttribute('aria-label', 'Toggle light or dark theme');
-  bar.append(titleEl, progress, outlineBtn, themeBtn);
+  var reloadBtn = el('button', 'rb-btn rb-reload', ICON.reload + '<span class="rb-reload-label">Updated</span>');
+  reloadBtn.type = 'button'; reloadBtn.title = 'Reload (keeps your place)'; reloadBtn.setAttribute('aria-label', 'Reload this runbook');
+  bar.append(titleEl, progress, reloadBtn, outlineBtn, themeBtn);
   body.insertBefore(bar, main);
 
   // Progress: lifecycle chip of each item card.
@@ -403,13 +415,33 @@
   sash.setAttribute('aria-label', 'Resize outline'); sash.title = 'Drag to resize · double-click to reset';
   body.append(nav, sash);
 
+  // Wide windows dock the outline (choice remembered); narrow ones open it as a
+  // drawer that starts closed and closes after picking a section.
+  var isWide = function () { return innerWidth >= 1200; };
+  var isOpen = function () { return body.classList.contains('rb-outline-on'); };
   function setOutline(on, save) {
     body.classList.toggle('rb-outline-on', on);
     outlineBtn.classList.toggle('active', on);
+    outlineBtn.setAttribute('aria-expanded', String(on));
+    outlineBtn.title = (on ? 'Hide' : 'Show') + ' outline';
     if (save) ls.set('runbook-outline', on ? '1' : '0');
   }
-  outlineBtn.addEventListener('click', function () { setOutline(!body.classList.contains('rb-outline-on'), true); });
-  setOutline(ls.get('runbook-outline') !== '0', false);
+  var defaultOpen = function () { return isWide() && ls.get('runbook-outline') !== '0'; };
+  outlineBtn.addEventListener('click', function () { setOutline(!isOpen(), isWide()); });
+  setOutline(defaultOpen(), false);
+  var wasWide = isWide();
+  addEventListener('resize', function () {
+    if (isWide() !== wasWide) { wasWide = isWide(); setOutline(defaultOpen(), false); }
+  });
+  nav.addEventListener('click', function (e) {
+    if (!isWide() && e.target.closest('a')) setOutline(false, false);
+  });
+  doc.addEventListener('click', function (e) {
+    if (!isWide() && isOpen() && !nav.contains(e.target) && !outlineBtn.contains(e.target)) setOutline(false, false);
+  });
+  doc.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !isWide() && isOpen()) setOutline(false, false);
+  });
 
   var outlineW = 248;
   function setWidth(w, save) {
@@ -466,6 +498,46 @@
     });
     pre.appendChild(btn);
   });
+
+  // Reload without losing your place (scroll + which Briefs are open).
+  var PLACE_KEY = 'runbook-place:' + location.pathname;
+  var detailsList = function () { return doc.querySelectorAll('details'); };
+  reloadBtn.addEventListener('click', function () {
+    var open = [];
+    Array.prototype.forEach.call(detailsList(), function (d, i) { if (d.open) open.push(i); });
+    try { sessionStorage.setItem(PLACE_KEY, JSON.stringify({ y: scrollY, open: open })); } catch (e) {}
+    location.reload();
+  });
+  (function restorePlace() {
+    var place = null;
+    try { place = JSON.parse(sessionStorage.getItem(PLACE_KEY) || 'null'); sessionStorage.removeItem(PLACE_KEY); } catch (e) {}
+    if (!place) return;
+    var ds = detailsList();
+    (place.open || []).forEach(function (i) { if (ds[i]) ds[i].open = true; });
+    scrollTo(0, place.y || 0);
+    if (doc.fonts) doc.fonts.ready.then(function () { scrollTo(0, place.y || 0); });
+  })();
+
+  // Served over http(s), the page can re-read itself and flag edits.
+  // Chrome blocks this for file:// pages, so there the button is manual only.
+  if (/^https?:$/.test(location.protocol)) {
+    var hash = function (s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; };
+    var original = null;
+    var check = function () {
+      if (doc.hidden || reloadBtn.classList.contains('has-update')) return;
+      fetch(location.href, { cache: 'no-store' }).then(function (r) { return r.ok ? r.text() : null; }).then(function (t) {
+        if (t === null) return;
+        if (original === null) { original = hash(t); return; }
+        if (hash(t) !== original) {
+          reloadBtn.classList.add('has-update');
+          reloadBtn.title = 'This runbook changed on disk — reload (keeps your place)';
+        }
+      }).catch(function () {});
+    };
+    check();
+    setInterval(check, 3000);
+    doc.addEventListener('visibilitychange', check);
+  }
 
   // Expand / collapse all details.
   var toggle = doc.getElementById('toggleAll');
