@@ -41,11 +41,11 @@ For **any other planned task** (feature, refactor, config change, …): after a 
 
 5. **Initial state:** every item/verification chip is `[PENDING]`; the H1 chip is `[AWAITING REVIEW]`.
 
-6. **Pre-handoff check, then stop:** `grep -n '{{' <dest>.md` — any hit is an unfilled placeholder or leftover template comment; fix every one. Then open it for the user and STOP:
+6. **Pre-handoff check, then stop:** `grep -n '{{' <dest>.md` — any hit is an unfilled placeholder or leftover template comment; fix every one. Then open it in the user's **default browser** (not the default app for `.md`, which is usually an editor) and STOP:
    ```bash
-   open -a "Google Chrome" <dest>.md
+   bash "<skill-dir>/scripts/open-in-browser.sh" <dest>.md
    ```
-   Also give the absolute `file:///…` path, and ask the user to review the runbook. Do not begin execution. (Viewing local files needs MD Pretty Viewer for Chrome with "Allow access to file URLs" turned on; if Chrome isn't installed, just give the path.)
+   It prints the `file:///…` URL it opened — give that to the user too, and ask them to review the runbook. Do not begin execution. (The formatted view needs MD Pretty Viewer for Chrome in that browser, with "Allow access to file URLs" on; if the script can't open a browser, just give the path.)
 
 ## During and after execution
 

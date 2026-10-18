@@ -10,7 +10,7 @@ The approved markdown plan is the working plan — execution starts from it imme
    - the absolute `<skill-dir>` path and the absolute destination path from step 1;
    - the "Subagent task" block below, copied in full.
 3. **Start executing the plan from the markdown immediately** — do not wait for the subagent or poll it.
-4. **On the subagent's completion notification:** open it for the user (`open -a "Google Chrome" <dest>.md`) and give the `file:///…` path; flip chips for any steps that already completed while the runbook was being built (dated notes per SKILL.md "During and after execution"); append the catch-up to the `Updated:` line. From then on keep the doc current as usual.
+4. **On the subagent's completion notification:** open it in the user's default browser (`bash "<skill-dir>/scripts/open-in-browser.sh" <dest>.md`) and give the `file:///…` URL it prints; flip chips for any steps that already completed while the runbook was being built (dated notes per SKILL.md "During and after execution"); append the catch-up to the `Updated:` line. From then on keep the doc current as usual.
 5. **No Agent tool available, or the dispatch fails?** Build the runbook inline yourself (follow the "Subagent task" block), at the next natural pause in execution.
 6. **User says no to saving?** Proceed with the plan directly — do not create the file.
 
