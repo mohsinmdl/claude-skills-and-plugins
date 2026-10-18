@@ -5,12 +5,12 @@
 # Usage: open-in-browser.sh <file.md>   — prints the file:// URL it opened.
 set -u
 file=${1:?usage: open-in-browser.sh <file.md>}
-url=$(python3 -c 'import pathlib,sys; print(pathlib.Path(sys.argv[1]).resolve().as_uri())' "$file") || exit 1
+url=$(python3 -I -c 'import pathlib,sys; print(pathlib.Path(sys.argv[1]).resolve().as_uri())' "$file") || exit 1
 
 if [ "$(uname)" = "Darwin" ]; then
   # Bundle id of the https handler, from LaunchServices.
   bid=$(plutil -convert json -o - "$HOME/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist" 2>/dev/null |
-    python3 -c 'import json,sys
+    python3 -I -c 'import json,sys
 for h in json.load(sys.stdin).get("LSHandlers", []):
     if h.get("LSHandlerURLScheme") == "https":
         print(h.get("LSHandlerRoleAll", "")); break' 2>/dev/null)
