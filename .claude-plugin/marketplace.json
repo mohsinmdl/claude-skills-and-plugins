@@ -1,6 +1,6 @@
 {
 	"name": "claude-skills-and-plugins",
-	"description": "Mohsin's Claude Code skills and plugins — document-first HTML runbooks with live status chips, and more",
+	"description": "Mohsin's Claude Code skills and plugins — document-first Markdown runbooks with live status chips, and more",
 	"owner": {
 		"name": "dev-mohsinm"
 	},
@@ -8,7 +8,7 @@
 		{
 			"name": "runbook",
 			"source": "./plugins/runbook",
-			"description": "Document-first HTML runbooks with live status chips: plan-of-record before execution, hooks that offer runbooks at plan time and keep the doc mirroring reality"
+			"description": "Document-first Markdown runbooks with live status chips: plan-of-record before execution, hooks that offer runbooks at plan time and keep the doc mirroring reality"
 		}
 	]
 }

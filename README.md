@@ -9,7 +9,7 @@ A collection of [Claude Code](https://claude.com/claude-code) **skills** and **p
 
 | Plugin | What it does |
 |---|---|
-| [`runbook`](plugins/runbook/) | Document-first HTML runbooks: before executing any planned task (ops, infra, migration, deployment, refactor, …), Claude writes the plan of record into a self-contained HTML runbook with live status chips. You review **the runbook**, not a chat message; work starts on your go-ahead, and chips flip `PENDING → IN PROGRESS → DONE` as steps complete, so the doc always mirrors reality. Bundles two hooks: a **plan-offer** hook (when Claude writes a plan-mode plan, it offers to save it as a runbook up front) and a **chip-reminder** hook (when a session that touched a runbook ends, Claude double-checks that chips, the `Updated:` line, and the footer date reflect what actually happened). |
+| [`runbook`](plugins/runbook/) | Document-first Markdown runbooks: before executing any planned task (ops, infra, migration, deployment, refactor, …), Claude writes the plan of record into a small `.md` runbook with live status chips. You review **the runbook**, not a chat message; work starts on your go-ahead, and chips flip `PENDING → IN PROGRESS → DONE` as steps complete, so the doc always mirrors reality. Bundles two hooks: a **plan-offer** hook (when Claude writes a plan-mode plan, it offers to save it as a runbook up front) and a **chip-reminder** hook (when a session that touched a runbook ends, Claude double-checks that chips, the `Updated:` line, and the footer date reflect what actually happened). |
 
 ### Install (as a plugin — recommended)
 
@@ -43,11 +43,11 @@ Claude Code auto-discovers skills in `~/.claude/skills/` (each skill is a folder
 
 ## How the runbook plugin works
 
-1. **Plan → runbook.** Claude copies the skill's `template.html`, fills it with the task's verdict, locked decisions, item cards (with risk chips), verification checks, and rollback table — never inventing CSS, always shaping sections to the task.
-2. **Review gate.** The runbook opens with an `AWAITING REVIEW` chip. Claude stops and hands you the file path; nothing executes until you say go.
+1. **Plan → runbook.** Claude copies the skill's `template.md` (~3 KB), fills it with the task's verdict, locked decisions, items (with bracket chips like `[HIGH]` `[PENDING]`), verification checks, and rollback table — plain Markdown only, always shaping sections to the task.
+2. **Review gate.** The runbook opens with an `[AWAITING REVIEW]` chip. Claude opens it in Chrome, gives you the path and stops; nothing executes until you say go.
 3. **Living record.** During execution every completed step flips its chip and gets a dated *Completed:* note; wrong claims get dated *Correction:* notes instead of silent rewrites. The chip-reminder hook backstops this: end a session with a stale runbook and Claude gets one nudge to sync it before finishing.
 
-The generated docs are single-file HTML — no build step, no dependencies, dark mode on `Ctrl/⌘+Shift+L`.
+The generated docs are Markdown with `runbook: true` frontmatter, readable in any editor. The formatted view (chip pills, item cards with severity rails, progress count, outline with status dots, light/dark) comes from a Chrome extension that recognises that frontmatter — the author uses a personal build of MD Pretty Viewer for Chrome, which isn't published yet. Runbooks made before v2.0.0 are self-contained HTML and keep working as they are.
 
 ## Repo layout
 
@@ -56,7 +56,7 @@ The generated docs are single-file HTML — no build step, no dependencies, dark
 plugins/
   runbook/
     .claude-plugin/plugin.json    # plugin manifest (name, version)
-    skills/runbook/               # the skill + its HTML template
+    skills/runbook/               # the skill + its Markdown template
     hooks/                        # hooks.json + hook scripts
 skills/
   find-course/                    # plain copy-in skills
