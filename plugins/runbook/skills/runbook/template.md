@@ -3,6 +3,7 @@ runbook: true
 ---
 # {{TITLE}} [AWAITING REVIEW]
 
+<!-- Meta: one "**Label:** value \" line per field. Updated: append "YYYY-MM-DD — what changed." entries on that line, oldest first. -->
 > **Related:** {{RELATED_DOCS_OR_DASH}} \
 > **Context:** {{ONE_LINE_CONTEXT}} \
 > **Purpose:** {{WHY_THIS_DOC_EXISTS}} \
@@ -45,7 +46,10 @@ Every service/tool named in this doc, and every acronym expanded — read this f
 ## Items
 
 <!-- One "### N. Title [RISK] [STATUS]" per item; everything until the next ### or ## is its collapsible Brief.
-     Keep the labels that apply, delete the rest. Back factual claims with the command that proved them. -->
+     Keep the labels that apply (1–3 sentences each), delete the rest. Back factual claims with the command that proved them.
+     Later, end an item with its own note paragraph: *Completed: YYYY-MM-DD — what happened.*
+     (also *Correction YYYY-MM-DD: originally X; actually Y.* · *Blocked: YYYY-MM-DD — what it waits on.*) -->
+
 ### 1. {{ITEM_TITLE}} [MED] [PENDING]
 
 **What's involved:** {{WHAT}}

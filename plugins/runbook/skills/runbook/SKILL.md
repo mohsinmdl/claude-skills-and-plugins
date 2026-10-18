@@ -35,13 +35,22 @@ For **any other planned task** (feature, refactor, config change, …): after a 
 
 4. **Always-on conventions (not optional):**
    - **Glossary section** — every runbook: one table of services/tools named in the doc (plain-language what-it-is + role here) and one expanding every acronym. Self-contained for a reader who doesn't know the stack; when a later edit introduces a new name, add it to the Glossary in the same edit.
-   - **`Updated:` line** in the meta block — a running dated changelog (starts `—` for a new doc; append an entry on every material change).
+   - **`Updated:` line** in the meta block — a running dated changelog (starts `—` for a new doc; append an entry on every material change). Write every entry as `YYYY-MM-DD — what changed.` on the same line, oldest first: `2026-07-07 — items 1–2 done. 2026-07-08 — item 3 blocked on DNS.` The viewer turns these into a dated list (latest three shown, older ones folded), so the date-dash prefix is required.
    - **"Verified via" evidence** — back factual claims with the command that proved them, inline. Don't assert state you didn't observe.
    - **Custom chip text is fine** — `[AWAITING USER]`, `[SOAK UNTIL 2026-06-27]`, `[BLOCKED — waiting on DNS]`.
 
-5. **Initial state:** every item/verification chip is `[PENDING]`; the H1 chip is `[AWAITING REVIEW]`.
+5. **Write for scanning.** Readers skim chips and verdicts first and open a brief only when they need detail:
+   - **Verdict:** 1–2 sentences that lead with the answer. **One-line verdict** cells: 12 words or fewer.
+   - **Item labels** (*What's involved*, *Why / how*, …): 1–3 sentences each; anything longer becomes a list.
+   - **Notes:** 2 sentences or fewer — what happened plus the evidence; extra detail goes in the item body or a command block.
+   - **Changelog entries:** one short clause each.
+   - Use a list for 3+ parallel things and a table for things compared on the same attributes; never a long paragraph of either.
+   - One idea per sentence, in plain words; names are defined in the Glossary, not explained inline.
+   - Commands go in fenced code blocks, not inside sentences; inline code is for names, paths and values only.
 
-6. **Pre-handoff check, then stop:** `grep -n '{{' <dest>.md` — any hit is an unfilled placeholder or leftover template comment; fix every one. Then open it in the user's **default browser** (not the default app for `.md`, which is usually an editor) and STOP:
+6. **Initial state:** every item/verification chip is `[PENDING]`; the H1 chip is `[AWAITING REVIEW]`.
+
+7. **Pre-handoff check, then stop:** `grep -n '{{' <dest>.md` — any hit is an unfilled placeholder or leftover template comment; fix every one. Then open it in the user's **default browser** (not the default app for `.md`, which is usually an editor) and STOP:
    ```bash
    bash "<skill-dir>/scripts/open-in-browser.sh" <dest>.md
    ```
@@ -50,7 +59,12 @@ For **any other planned task** (feature, refactor, config change, …): after a 
 ## During and after execution
 
 - On go-ahead: flip the H1 chip to `[IN PROGRESS]`.
-- As each step completes: flip its chip to `[DONE]` (in the item heading **and** its summary row) and append a dated note at the end of the item, e.g. `*Completed: 2026-07-07 — what actually happened.*`. Blocked steps get `[BLOCKED — reason]`.
-- When a claim turns out **wrong**: never silently overwrite — add a `[CORRECTED 2026-07-07]` chip to the item heading and a note: `*Correction 2026-07-07: originally said X; actually Y.*`
+- As each step completes: flip its chip to `[DONE]` (in the item heading **and** its summary row) and append a dated note at the end of the item. Blocked steps get `[BLOCKED — reason]` and a Blocked note.
+- When a claim turns out **wrong**: never silently overwrite — add a `[CORRECTED 2026-07-07]` chip to the item heading and a Correction note.
+- **Note formats.** Each note is its own paragraph, wrapped whole in one `*…*`, label first — the viewer shows it as an upright, labelled block:
+  - `*Completed: 2026-07-07 — what actually happened.*`
+  - `*Correction 2026-07-07: originally said X; actually Y.*`
+  - `*Blocked: 2026-07-07 — what it waits on.*`
+  - `*Note: anything else worth keeping beside the item.*`
 - When everything is done: H1 chip → `[DONE]`, update the footer "Last updated" date.
 - Every material update (chip flip, correction, new item) also appends a dated entry to the `Updated:` line in the meta block — don't let the changelog go stale while chips move.
