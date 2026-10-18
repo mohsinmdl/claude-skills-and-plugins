@@ -34,13 +34,14 @@
   code, pre { background: #f6f6f6; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
   pre { padding: 8px 12px; overflow-x: auto; }
   .item-card { border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin: 10px 0; background: #fafafa; }
-  .item-card.high { border-left: 4px solid #d9534f; }
-  .item-card.med { border-left: 4px solid #f0ad4e; }
-  .item-card.low { border-left: 4px solid #ffc107; }
-  .item-card.ok { border-left: 4px solid #5cb85c; }
-  .item-card.p1 { border-left: 4px solid #d9534f; }
-  .item-card.p2 { border-left: 4px solid #f0ad4e; }
-  .item-card.p3 { border-left: 4px solid #ffc107; }
+  /* Severity accent — a deliberate 2px muted edge (subtle severity rail, not a 4px slab). */
+  .item-card.high { border-left: 2px solid #b4453b; }
+  .item-card.med { border-left: 2px solid #c07f33; }
+  .item-card.low { border-left: 2px solid #a98a2c; }
+  .item-card.ok { border-left: 2px solid #4a9163; }
+  .item-card.p1 { border-left: 2px solid #b4453b; }
+  .item-card.p2 { border-left: 2px solid #c07f33; }
+  .item-card.p3 { border-left: 2px solid #a98a2c; }
   .small { font-size: 12px; color: #666; }
   /* Dark mode — default is light; Ctrl/Cmd+Shift+L toggles (persisted in localStorage). */
   body.dark { background: #16181d; color: #d6d8dd; }
@@ -51,6 +52,11 @@
   body.dark th, body.dark td { border-color: #3a3f4a; }
   body.dark code, body.dark pre { background: #23262e; }
   body.dark .item-card { background: #1c1f26; border-color: #3a3f4a; }
+  /* Re-assert the severity accent in dark mode (the rule above sets all four border colors), brightened for the dark card. */
+  body.dark .item-card.high, body.dark .item-card.p1 { border-left-color: #d16459; }
+  body.dark .item-card.med,  body.dark .item-card.p2 { border-left-color: #d89a52; }
+  body.dark .item-card.low,  body.dark .item-card.p3 { border-left-color: #c4a648; }
+  body.dark .item-card.ok { border-left-color: #62b581; }
   body.dark .small { color: #9aa0aa; }
   body.dark .pending { background: #2c2f36; color: #b6bac2; }
   body.dark button.toggle-all { background: #262a33; color: #d6d8dd; border-color: #555; }
