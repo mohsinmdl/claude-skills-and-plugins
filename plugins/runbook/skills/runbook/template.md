@@ -11,9 +11,6 @@ runbook: true
 > **Created:** {{DATE}} \
 > **Updated:** —
 
-<!-- OPTIONAL risk-legend prose (define the levels for THIS doc); delete for simple execution runbooks. -->
-[HIGH] {{WHAT_HIGH_MEANS_HERE}} · [MED] {{WHAT_MED_MEANS_HERE}} · [LOW] {{WHAT_LOW_MEANS_HERE}} · [PORTABLE] {{WHAT_PORTABLE_MEANS_HERE}}
-
 ## Verdict
 
 **{{HEADLINE_VERDICT_ONE_OR_TWO_SENTENCES}}**
