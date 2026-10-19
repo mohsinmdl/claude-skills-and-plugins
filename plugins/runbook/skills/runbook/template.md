@@ -46,6 +46,7 @@ Every service/tool named in this doc, and every acronym expanded — read this f
 ## Items
 
 <!-- One "### N. Title [RISK] [STATUS]" per item; everything until the next ### or ## is its collapsible Brief.
+     To group items, an unnumbered "### Phase 1 — Rollout" between them is a group label, not an item.
      Keep the labels that apply (1–3 sentences each), delete the rest. Back factual claims with the command that proved them.
      Later, end an item with its own note paragraph: *Completed: YYYY-MM-DD — what happened.*
      (also *Correction YYYY-MM-DD: originally X; actually Y.* · *Blocked: YYYY-MM-DD — what it waits on.*) -->
