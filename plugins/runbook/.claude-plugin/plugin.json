@@ -1,9 +1,9 @@
 {
 	"name": "runbook",
 	"description": "Document-first Markdown runbooks with live status chips: plan-of-record before execution, hooks that offer runbooks at plan time and keep the doc mirroring reality",
-	"version": "2.1.1",
+	"version": "2.1.2",
 	"author": {
-		"name": "dev-mohsinm"
+		"name": "mohsinmdl"
 	},
 	"license": "MIT"
 }

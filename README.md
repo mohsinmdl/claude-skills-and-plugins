@@ -14,11 +14,11 @@ A collection of [Claude Code](https://claude.com/claude-code) **skills** and **p
 ### Install (as a plugin — recommended)
 
 ```
-/plugin marketplace add dev-mohsinm/claude-skills-and-plugins
+/plugin marketplace add mohsinmdl/claude-skills-and-plugins
 /plugin install runbook@claude-skills-and-plugins
 ```
 
-Or from a shell: `claude plugin marketplace add dev-mohsinm/claude-skills-and-plugins && claude plugin install runbook@claude-skills-and-plugins`.
+Or from a shell: `claude plugin marketplace add mohsinmdl/claude-skills-and-plugins && claude plugin install runbook@claude-skills-and-plugins`.
 
 The skill is then available as `/runbook:runbook`, and both hooks are active with zero `settings.json` editing. Upgrade later with `/plugin update runbook`.
 
@@ -33,7 +33,7 @@ The skill is then available as `/runbook:runbook`, and both hooks are active wit
 Copy the skill folder(s) you want into your Claude Code skills directory:
 
 ```bash
-git clone https://github.com/dev-mohsinm/claude-skills-and-plugins.git
+git clone https://github.com/mohsinmdl/claude-skills-and-plugins.git
 cp -r claude-skills-and-plugins/skills/find-course ~/.claude/skills/find-course
 ```
 

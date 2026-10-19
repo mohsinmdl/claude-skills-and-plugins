@@ -2,7 +2,7 @@
 	"name": "claude-skills-and-plugins",
 	"description": "Mohsin's Claude Code skills and plugins — document-first Markdown runbooks with live status chips, and more",
 	"owner": {
-		"name": "dev-mohsinm"
+		"name": "mohsinmdl"
 	},
 	"plugins": [
 		{
